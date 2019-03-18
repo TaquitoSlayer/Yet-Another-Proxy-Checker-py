@@ -9,7 +9,7 @@ import random
 import requests
 import logging
 from sys import platform
-# from tqdm import tqdm
+import bs4 as bs
 
 r = requests.session()
 logging.basicConfig(level=logging.INFO, format = '%(asctime)s: %(message)s')
@@ -21,7 +21,7 @@ headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleW
 file_unchecked = 'proxies_unchecked.txt'
 file_checked = 'proxies_good.txt'
 ping_wanted = 500
-site = 'offthehook.ca'
+site = 'magendasfto'
 ################ ^change this shit^ ################
 
 # thanks again to @idontcop for this method, been using it for 2 years
@@ -48,11 +48,22 @@ proxies = read_proxies(file_unchecked)
 # we check for a successful return on the products.json['products']['handle'] method for shopify
 # made to be modified without the need for try/excepts as that's taken care of in main()
 def List(url, proxy):
-    json_url = f'https://{url}/products.json'
-    dump = r.get(json_url, headers = headers, proxies={"http": proxy, "https": proxy}, timeout=10) # make timeout=None if you wanna live life on the edge - fuck pep8 standards on these comments too
-    products = dump.json()['products']
-    for product in products:
-        _placeholder = product['handle']
+    if url == 'shopify':
+        json_url = f'https://offthehook.ca/products.json'
+        dump = r.get(json_url, headers = headers, proxies={"http": proxy, "https": proxy}, timeout=10) # make timeout=None if you wanna live life on the edge - fuck pep8 standards on these comments too
+        products = dump.json()['products']
+        for product in products:
+            _placeholder = product['handle']
+    elif url == 'magento':
+        url = f'https://asphaltgold.de/de/sneaker'
+        dump = r.get(url, headers = headers, proxies={"http": proxy, "https": proxy}, timeout=10) # make timeout=None if you wanna live life on the edge - fuck pep8 standards on these comments too
+        soup = bs.BeautifulSoup(dump.text, 'lxml')
+        find_me = soup.find('span', {'class': 'regular-price'}).get('content')
+        if find_me == None:
+            raise TypeError
+    else:
+        logging.info(f'{url} is not currently supported.')
+        raise TypeError
 
 def main(proxy):
     proxy_formatted = proxy_parse(proxy)

@@ -4,7 +4,7 @@ Yet Another Proxy Checker made in 10 minutes with Python.
 ### Features
   - Ability to filter proxies based on ping (ms) preference.
   - Corny comments inside the script.
-  - Currently supporting Shopify-based sites that support the products.json endpoint, will add Supreme soon.
+  - Currently supporting Shopify and Magento-based sites
   - I didn't add the cache bypass in here, go away.
 ### Requirements
 - Python 3.6 or higher.
@@ -17,8 +17,7 @@ Yet Another Proxy Checker made in 10 minutes with Python.
 file_unchecked = 'proxies_unchecked.txt' # name of text file in same directory to check
 file_checked = 'proxies_good.txt'# name of text file in same directory to output
 ping_wanted = 500 # max ping (ms) wanted from each proxy to be considered good
-site = 'offthehook.ca' # what shopify site you want to test it under
-```
+site = 'magento' # what type of site you want to test, shopify and magento currently supported
 - For the first time, run both lines in your command line
 ```sh
 $ pip install -r requirements.txt
